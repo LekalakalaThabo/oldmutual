@@ -11,27 +11,40 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class Page {
     public static WebDriver driver;
     public static Logger log = Logger.getLogger("loanCalculator_Logs");
 //	public static WebDriverWait wait =  new WebDriverWait(driver, Duration.ofSeconds(10));
-
+    public static String browser;
+    public static Properties config = new Properties();
 
     public static void initConfiguration() {
-        if (Constants.browser.equals("firefox")) {
+
+
+        if((System.getenv("browser")!=null) && (System.getenv("browser").equals("")))
+            browser = System.getenv("browser");
+        else{
+            browser = Constants.browser;
+
+        }
+
+        config.setProperty("browser", browser);
+
+        if (config.getProperty("browser").equals("firefox")) {
             WebDriverManager.firefoxdriver().setup();
             driver = new FirefoxDriver();
             log.debug("firefox Launched !!!");
-        } else if (Constants.browser.equals("chrome")) {
+        } else if (config.getProperty("browser").equals("chrome")) {
             WebDriverManager.chromedriver().setup();
             driver = new ChromeDriver();
             log.debug("Chrome Launched !!!");
-        } else if (Constants.browser.equals("ie")) {
+        } else if (config.getProperty("browser").equals("ie")) {
             WebDriverManager.iedriver().setup();
             driver = new InternetExplorerDriver();
             log.debug("InternetExplorerDriver Launched !!!");
-        } else if (Constants.browser.equals("edge")) {
+        } else if (config.getProperty("browser").equals("edge")) {
             WebDriverManager.edgedriver().setup();
             driver = new EdgeDriver();
             log.debug("Edge Launched !!!");
